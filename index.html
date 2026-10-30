@@ -81,6 +81,15 @@
           "@type": "Offer",
           "itemOffered": {
             "@type": "Course",
+            "name": "Skupina B — přezkoušení pro vrácení řidičského oprávnění"
+          },
+          "price": "4277",
+          "priceCurrency": "CZK"
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Course",
             "name": "Kondiční jízdy (skupina B)",
             "description": "Zdokonalení techniky a jistoty za volantem, bez závěrečné zkoušky."
           },
@@ -401,9 +410,10 @@
     #cenik { background: var(--gray-50); }
     .pricing-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 20px;
     }
+    @media(max-width: 640px) { .pricing-grid { grid-template-columns: 1fr; } }
     .price-card {
       background: var(--white);
       border: 2px solid var(--gray-200);
@@ -806,8 +816,15 @@
         <div class="card-note">+ 700 Kč poplatek Magistrátu</div>
       </div>
       <div class="price-card fade-up">
+        <div class="card-category">Vrácení řidičáku</div>
+        <div class="card-title">Skupina B — Přezkoušení</div>
+        <div class="card-desc">Příprava a přezkoušení pro vrácení řidičského oprávnění.</div>
+        <div class="card-price">4 277 Kč <small>/ kurz</small></div>
+        <div class="card-note">+ 700 Kč poplatek Magistrátu</div>
+      </div>
+      <div class="price-card fade-up">
         <div class="card-category">Osobní auto</div>
-        <div class="card-title">Skupina B — Rychlokurz</div>
+        <div class="card-title">Skupina B — Individuální rychlokurz</div>
         <div class="card-desc">Zkrácená doba výcviku na přání, termín dle dohody.</div>
         <div class="card-price">Cena dle domluvy</div>
         <div class="card-note"></div>

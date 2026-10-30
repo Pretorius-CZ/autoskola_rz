@@ -85,6 +85,11 @@
       border: 1px solid var(--gray-200); border-radius: 9px; background: var(--white);
     }
     input:focus { outline: 2px solid var(--blue); outline-offset: 1px; border-color: transparent; }
+    .volby { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+    .volby label {
+      display: inline-flex; align-items: center; gap: 8px; margin: 0;
+      border: 1px solid var(--gray-200); border-radius: 9px; padding: 8px 14px; cursor: pointer;
+    }
     .napoveda { font-size: .8rem; color: var(--gray-600); margin-top: 6px; }
 
     .poznamka {
@@ -132,6 +137,10 @@
       <fieldset>
         <legend>Řidičské oprávnění</legend>
         <p class="napoveda" style="margin: 0 0 14px;">Žádost je na výcvik pro skupinu <strong>B</strong> (osobní automobil).</p>
+        <div class="volby">
+          <label><input type="radio" name="ucel" value="ziskat" checked /> Chci získat řidičák</label>
+          <label><input type="radio" name="ucel" value="vratit" /> Chci vrátit řidičák (přezkoušení)</label>
+        </div>
         <div class="mrizka">
           <div>
             <label for="drzitelSkupin">Už mám řidičák pro skupiny <span class="nepovinne">(nepovinné)</span></label>
@@ -227,8 +236,7 @@
       </div>
       <p id="whatsapp" hidden>
         Žádost pošlete na WhatsApp autoškoly:
-        <a href="https://wa.me/420777946063?text=Dobr%C3%BD%20den%2C%20pos%C3%ADl%C3%A1m%20%C5%BE%C3%A1dost%20o%20p%C5%99ijet%C3%AD%20k%20v%C3%BDuce%20a%20v%C3%BDcviku."
-           target="_blank" rel="noopener">+420 777 946 063</a>
+        <a id="whatsapp-odkaz" href="https://wa.me/420777946063" target="_blank" rel="noopener">+420 777 946 063</a>
         <span id="whatsapp-postup"></span>
       </p>
     </form>
@@ -291,6 +299,7 @@
   const sdilet = document.getElementById("sdilet");
   const whatsapp = document.getElementById("whatsapp");
   const whatsappPostup = document.getElementById("whatsapp-postup");
+  const whatsappOdkaz = document.getElementById("whatsapp-odkaz");
   let posledniUrl = null;
   let posledniSoubor = null;
   let posledniText = "";
@@ -348,10 +357,19 @@
       const nazev = `zadost-${bezpecnyNazev(udaje.prijmeni) || "autoskola"}.pdf`;
       posledniSoubor = new File([pdf], nazev, { type: "application/pdf" });
       const email = String(data.get("email") ?? "").trim().slice(0, 100);
+      // Tiskopis je pro získání i vrácení stejný, účel je jen informace
+      // pro autoškolu ve zprávě.
+      const ucel = data.get("ucel") === "vratit"
+        ? "vrácení řidičského oprávnění (přezkoušení)"
+        : "získání řidičského oprávnění";
       posledniText = [
         `Žádost o přijetí k výuce a výcviku — ${udaje.jmeno.trim()} ${udaje.prijmeni.trim()}`,
+        `Skupina B, ${ucel}`,
         email && `Kontaktní e-mail: ${email}`,
       ].filter(Boolean).join("\n");
+      whatsappOdkaz.href = "https://wa.me/420777946063?text=" + encodeURIComponent(
+        `Dobrý den, posílám žádost o přijetí k výuce a výcviku — skupina B, ${ucel}.`,
+      );
       sdilet.hidden = !navigator.canShare?.({ files: [posledniSoubor] });
       // Odkaz otevře chat s autoškolou, PDF ale WhatsApp přes odkaz přiložit
       // nedovolí — to se dělá přes "Poslat / sdílet", nebo ručně ze stažených souborů.
