@@ -1,1 +1,3 @@
 node_modules/
+# zdroj posudku z ministerstva (DOC); na webu je převedené PDF
+tiskopisy/*.doc

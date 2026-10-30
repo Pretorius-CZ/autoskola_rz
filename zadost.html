@@ -90,6 +90,8 @@
     }
     button:hover { background: var(--orange-d); }
     button:disabled { opacity: .6; cursor: wait; }
+    #sdilet { background: var(--blue); box-shadow: none; padding: 10px 20px; font-size: .9rem; }
+    #sdilet:hover { background: #1a3faa; }
     #stav { font-size: .9rem; color: var(--gray-600); }
     #stav a { color: var(--blue); font-weight: 700; }
     #stav.chyba { color: #b91c1c; }
@@ -162,7 +164,7 @@
             <input type="text" id="mistoNarozeni" name="mistoNarozeni" />
           </div>
           <div>
-            <label for="rodneCislo">Rodné číslo</label>
+            <label for="rodneCislo">Rodné číslo <span class="nepovinne">(nepovinné)</span></label>
             <input type="text" id="rodneCislo" name="rodneCislo" inputmode="numeric" placeholder="např. 0703140123" />
           </div>
           <div>
@@ -211,6 +213,7 @@
 
       <div class="tlacitka">
         <button type="submit" id="tlacitko">Vytvořit žádost (PDF)</button>
+        <button type="button" id="sdilet" hidden>Poslat / sdílet</button>
         <span id="stav" role="status" aria-live="polite"></span>
       </div>
     </form>
@@ -267,11 +270,35 @@
     return null;
   }
 
+  const sdilet = document.getElementById("sdilet");
   let posledniUrl = null;
+  let posledniSoubor = null;
+  const umiSdilet = !!navigator.canShare?.({ files: [new File([""], "zkouska.pdf", { type: "application/pdf" })] });
+
+  // Sdílení otevře nabídku telefonu (e-mail, WhatsApp…) s přiloženým PDF.
+  // Posílá návštěvník ze svého účtu, přes náš web nic neprochází.
+  // Většina počítačů sdílení souborů neumí — tam tlačítko zůstane schované.
+  sdilet.addEventListener("click", async () => {
+    try {
+      await navigator.share({
+        files: [posledniSoubor],
+        title: "Žádost o přijetí k výuce a výcviku",
+        text: "Žádost o přijetí k výuce a výcviku — Autoškola Roman Zelníček",
+      });
+    } catch (e) {
+      // Zavření nabídky bez odeslání není chyba.
+      if (e.name !== "AbortError") {
+        console.error(e);
+        stav.className = "chyba";
+        stav.textContent = "Sdílení se nepovedlo. Žádost si prosím stáhněte a pošlete jako přílohu.";
+      }
+    }
+  });
 
   formular.addEventListener("submit", async (udalost) => {
     udalost.preventDefault();
     stav.className = "";
+    sdilet.hidden = true;
 
     const chyba = zkontroluj();
     if (chyba) { stav.className = "chyba"; stav.textContent = chyba; return; }
@@ -282,7 +309,9 @@
     );
 
     // Okno otevřít hned při kliknutí, jinak ho prohlížeč po čekání zablokuje.
-    const okno = window.open("", "_blank");
+    // Kde jde sdílet (telefony), neotevíráme: nová záložka by schovala
+    // tlačítko pro odeslání.
+    const okno = umiSdilet ? null : window.open("", "_blank");
     okno?.document.write("<p style='font-family:sans-serif'>Připravuji žádost…</p>");
 
     tlacitko.disabled = true;
@@ -294,14 +323,24 @@
       if (posledniUrl) URL.revokeObjectURL(posledniUrl);
       posledniUrl = URL.createObjectURL(new Blob([pdf], { type: "application/pdf" }));
       const nazev = `zadost-${bezpecnyNazev(udaje.prijmeni) || "autoskola"}.pdf`;
+      posledniSoubor = new File([pdf], nazev, { type: "application/pdf" });
+      sdilet.hidden = !navigator.canShare?.({ files: [posledniSoubor] });
 
       if (okno) okno.location.href = posledniUrl;
       stav.innerHTML = "";
-      const odkaz = document.createElement("a");
-      odkaz.href = posledniUrl;
-      odkaz.download = nazev;
-      odkaz.textContent = `Stáhnout ${nazev}`;
-      stav.append(okno ? "Žádost se otevřela v nové záložce. " : "Hotovo. ", odkaz);
+      const stahnout = document.createElement("a");
+      stahnout.href = posledniUrl;
+      stahnout.download = nazev;
+      stahnout.textContent = `Stáhnout ${nazev}`;
+      if (okno) {
+        stav.append("Žádost se otevřela v nové záložce. ", stahnout);
+      } else {
+        const otevrit = document.createElement("a");
+        otevrit.href = posledniUrl;
+        otevrit.target = "_blank";
+        otevrit.textContent = "Otevřít";
+        stav.append("Hotovo. ", otevrit, " · ", stahnout);
+      }
     } catch (e) {
       okno?.close();
       console.error(e);
