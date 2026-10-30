@@ -7,7 +7,8 @@
   <link rel="icon" href="favicon/favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="favicon/favicon.ico" sizes="32x32" />
   <link rel="apple-touch-icon" href="favicon/apple-touch-icon.png" />
-  <meta name="description" content="Autoškola Roman Zelníček v Jablonci nad Nisou. Kurzy skupiny B, AM, A1, A2, A. Cena od 14 777 Kč, splátky bez navýšení, flexibilní termíny, nová Škoda Fabia. Zavolejte: +420 777 946 063." />
+  <meta name="description" content="Autoškola v Jablonci nad Nisou. Řidičák B, AM, A1, A2, A, splátky bez navýšení, nová Škoda Fabia. Volejte +420 777 946 063." />
+  <link rel="canonical" href="https://autoskola-rz.cz/" />
   <meta name="keywords" content="autoškola Jablonec nad Nisou, řidičský průkaz Jablonec, kurz skupiny B, řidičák Liberecký kraj, autoškola Zelníček, výcvik řízení" />
   <meta name="robots" content="index, follow" />
   <meta name="author" content="Roman Zelníček" />
@@ -22,12 +23,17 @@
   <meta property="og:site_name" content="Autoškola Roman Zelníček" />
   <meta property="og:title" content="Autoškola Roman Zelníček — Řidičák v Jablonci nad Nisou" />
   <meta property="og:description" content="Profesionální výuka a výcvik řízení v Jablonci nad Nisou. Skupina B za 18 277 Kč, splátky zdarma, flexibilní termíny. Zavolejte: +420 777 946 063." />
-  <meta property="og:image" content="auto.png" />
+  <meta property="og:url" content="https://autoskola-rz.cz/" />
+  <meta property="og:image" content="https://autoskola-rz.cz/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Škoda Fabia — výcvikové vozidlo autoškoly Roman Zelníček" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Autoškola Roman Zelníček — Jablonec nad Nisou" />
   <meta name="twitter:description" content="Kurzy řidičského oprávnění skupiny B, AM, A, A1, A2. Splátky bez navýšení, nová Škoda Fabia. Jablonec nad Nisou." />
+  <meta name="twitter:image" content="https://autoskola-rz.cz/og-image.jpg" />
 
   <!-- JSON-LD strukturovaná data (lokální firma + vzdělávací organizace) -->
   <script type="application/ld+json">
@@ -271,6 +277,7 @@
       margin-bottom: 20px;
     }
     #hero h1 span { color: var(--orange); }
+    #hero h1 .hero-badge { display: flex; width: fit-content; color: #fb923c; line-height: normal; }
     #hero p {
       font-size: clamp(.95rem, 1.6vw, 1.1rem);
       color: rgba(255,255,255,.68);
@@ -287,6 +294,7 @@
     @media(max-width: 900px) {
       .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 40px; }
       .hero-btns { justify-content: center; }
+      #hero h1 .hero-badge { margin-left: auto; margin-right: auto; }
       .hero-stats { justify-content: center !important; }
       .hero-image { display: none; }
     }
@@ -722,11 +730,13 @@
 <section id="hero">
   <div class="hero-inner">
     <div class="hero-content">
-      <div class="hero-badge">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        Jablonec nad Nisou
-      </div>
-      <h1>Řidičák bez <span>stresu</span><br>a za rozumné peníze</h1>
+      <h1>
+        <span class="hero-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Autoškola Jablonec nad Nisou
+        </span>
+        Řidičák bez <span>stresu</span><br>a za rozumné peníze
+      </h1>
       <p>Profesionální výuka a výcvik pro získání řidičského oprávnění. Individuální přístup, flexibilní termíny, splátky zdarma.</p>
       <div class="hero-btns">
         <a href="#cenik" class="btn-primary">Zobrazit ceník</a>
@@ -748,7 +758,7 @@
       </div>
     </div>
     <div class="hero-image">
-      <img src="auto.png" alt="Škoda Fabia — výcvikové vozidlo autoškoly Roman Zelníček" />
+      <img src="auto.webp" width="1080" height="720" fetchpriority="high" alt="Škoda Fabia — výcvikové vozidlo autoškoly Roman Zelníček" />
     </div>
   </div>
 </section>
@@ -939,7 +949,7 @@
       </ul>
     </div>
     <div class="car-visual">
-      <img src="auto.png" alt="Škoda Fabia — výcvikové vozidlo" />
+      <img src="auto.webp" width="1080" height="720" loading="lazy" alt="Škoda Fabia — výcvikové vozidlo" />
     </div>
   </div>
 </section>
