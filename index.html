@@ -701,7 +701,7 @@
 <!-- ══ NAVBAR ═══════════════════════════════════════════ -->
 <nav id="navbar">
   <div class="nav-inner">
-    <a class="nav-logo" href="#hero">Autoškola <span>Roman Zelníček</span></a>
+    <a class="nav-logo" href="./">Autoškola <span>Roman Zelníček</span></a>
     <ul class="nav-links" id="navLinks">
       <li><a href="#cenik">Ceník</a></li>
       <li><a href="#prubeh">Jak to probíhá</a></li>
@@ -1090,6 +1090,27 @@
   window.addEventListener('scroll', () => {
     navbar.classList.toggle('scrolled', window.scrollY > 40);
   });
+
+  // Čistá adresa: odkazy uvnitř stránky jen plynule posunou, #… se do adresy
+  // nepřidá. Bez skriptu fungují obyčejně (logo "./" stránku načte znovu).
+  const cistaAdresa = () => history.replaceState(null, '', location.pathname + location.search);
+  document.querySelector('.nav-logo').addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    cistaAdresa();
+  });
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const cil = document.getElementById(a.getAttribute('href').slice(1));
+      if (!cil) return;
+      e.preventDefault();
+      cil.scrollIntoView({ behavior: 'smooth' });
+      cistaAdresa();
+    });
+  });
+  // Příchod s #… (např. "Zpět na web" z formuláře): prohlížeč na sekci
+  // odscrolluje sám, pak koncovku z adresy smažeme.
+  if (location.hash) window.addEventListener('load', cistaAdresa);
 
   // Hamburger
   function toggleMenu() {
