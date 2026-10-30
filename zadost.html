@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vyplnit žádost o přijetí k výuce — Autoškola Roman Zelníček</title>
+  <meta name="description" content="Vyplňte žádost o přijetí k výuce a výcviku online a stáhněte si ji jako PDF připravené k tisku a podpisu." />
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #0a1628;
+      --blue:   #1d4ed8;
+      --orange: #f97316;
+      --orange-d: #ea6c0a;
+      --white:  #ffffff;
+      --gray-50: #f8fafc;
+      --gray-200: #e2e8f0;
+      --gray-400: #94a3b8;
+      --gray-600: #475569;
+      --gray-800: #1e293b;
+      --radius: 16px;
+      --shadow: 0 4px 24px rgba(0,0,0,.08);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--gray-800);
+      background: var(--gray-50);
+      line-height: 1.6;
+    }
+
+    /* ── HLAVIČKA ────────────────────────────────────── */
+    header { background: var(--navy); padding: 0 24px; }
+    .nav-inner {
+      max-width: 820px; margin: 0 auto; height: 68px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { color: var(--white); font-weight: 800; font-size: 1.15rem; letter-spacing: -.3px; text-decoration: none; }
+    .nav-logo span { color: var(--orange); }
+    .nav-back { color: rgba(255,255,255,.75); font-size: .9rem; font-weight: 600; text-decoration: none; }
+    .nav-back:hover { color: var(--white); }
+
+    /* ── FORMULÁŘ ────────────────────────────────────── */
+    main { padding: 56px 24px 96px; }
+    .container { max-width: 820px; margin: 0 auto; }
+    .section-tag {
+      display: inline-block; background: rgba(29,78,216,.1); color: var(--blue);
+      font-size: .75rem; font-weight: 700; letter-spacing: .8px; text-transform: uppercase;
+      padding: 5px 14px; border-radius: 999px; margin-bottom: 16px;
+    }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 900; letter-spacing: -1px; line-height: 1.15; margin-bottom: 12px; }
+    .uvod { color: var(--gray-600); margin-bottom: 32px; }
+
+    form {
+      background: var(--white); border: 1px solid var(--gray-200);
+      border-radius: var(--radius); box-shadow: var(--shadow); padding: 32px;
+    }
+    fieldset { border: 0; margin-bottom: 28px; }
+    legend { font-weight: 800; font-size: 1.05rem; margin-bottom: 14px; }
+    .mrizka { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px 20px; }
+    .siroke { grid-column: 1 / -1; }
+    label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: 6px; }
+    label .nepovinne { font-weight: 400; color: var(--gray-400); }
+    input[type=text], input[type=tel], input[type=date] {
+      width: 100%; font: inherit; font-size: .95rem; padding: 10px 12px;
+      border: 1px solid var(--gray-200); border-radius: 9px; background: var(--white);
+    }
+    input:focus { outline: 2px solid var(--blue); outline-offset: 1px; border-color: transparent; }
+    .skupiny { display: flex; flex-wrap: wrap; gap: 10px; }
+    .skupiny label {
+      display: inline-flex; align-items: center; gap: 8px; margin: 0;
+      border: 1px solid var(--gray-200); border-radius: 9px; padding: 8px 14px; cursor: pointer;
+    }
+    .napoveda { font-size: .8rem; color: var(--gray-600); margin-top: 6px; }
+
+    .poznamka {
+      background: rgba(249,115,22,.07); border-left: 3px solid var(--orange);
+      border-radius: 8px; padding: 14px 18px; font-size: .85rem; color: var(--gray-600); margin-bottom: 24px;
+    }
+    .tlacitka { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+    button {
+      background: var(--orange); color: var(--white); font: inherit; font-weight: 700; font-size: 1rem;
+      padding: 14px 30px; border: 0; border-radius: 12px; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(249,115,22,.4); transition: background .2s;
+    }
+    button:hover { background: var(--orange-d); }
+    button:disabled { opacity: .6; cursor: wait; }
+    #stav { font-size: .9rem; color: var(--gray-600); }
+    #stav a { color: var(--blue); font-weight: 700; }
+    #stav.chyba { color: #b91c1c; }
+
+    @media(max-width: 520px) { form { padding: 22px; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html">Autoškola <span>Roman Zelníček</span></a>
+    <a class="nav-back" href="index.html#prihlaška">← Zpět na web</a>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <span class="section-tag">Přihláška</span>
+    <h1>Žádost o přijetí k výuce a výcviku</h1>
+    <p class="uvod">
+      Vyplňte údaje a dostanete úřední tiskopis žádosti vyplněný v PDF.
+      Vytiskněte ho <strong>oboustranně na jeden list</strong>, podepište a přineste do autoškoly.
+    </p>
+
+    <form id="formular" novalidate>
+      <fieldset>
+        <legend>Skupina řidičského oprávnění</legend>
+        <label>Žádám o výcvik pro skupinu</label>
+        <div class="skupiny">
+          <label><input type="checkbox" name="skupina" value="B" /> B</label>
+          <label><input type="checkbox" name="skupina" value="AM" /> AM</label>
+          <label><input type="checkbox" name="skupina" value="A1" /> A1</label>
+          <label><input type="checkbox" name="skupina" value="A2" /> A2</label>
+          <label><input type="checkbox" name="skupina" value="A" /> A</label>
+        </div>
+        <div class="mrizka" style="margin-top: 16px;">
+          <div>
+            <label for="drzitelSkupin">Už mám řidičák pro skupiny <span class="nepovinne">(nepovinné)</span></label>
+            <input type="text" id="drzitelSkupin" name="drzitelSkupin" placeholder="např. AM, B" />
+          </div>
+          <div>
+            <label for="cisloRidicskeho">Číslo řidičského průkazu <span class="nepovinne">(nepovinné)</span></label>
+            <input type="text" id="cisloRidicskeho" name="cisloRidicskeho" />
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Osobní údaje</legend>
+        <div class="mrizka">
+          <div>
+            <label for="jmeno">Jméno</label>
+            <input type="text" id="jmeno" name="jmeno" required autocomplete="given-name" />
+          </div>
+          <div>
+            <label for="prijmeni">Příjmení</label>
+            <input type="text" id="prijmeni" name="prijmeni" required autocomplete="family-name" />
+          </div>
+          <div>
+            <label for="titul">Titul <span class="nepovinne">(nepovinné)</span></label>
+            <input type="text" id="titul" name="titul" autocomplete="honorific-prefix" />
+          </div>
+          <div>
+            <label for="datumNarozeni">Datum narození</label>
+            <input type="date" id="datumNarozeni" name="datumNarozeni" required min="1900-01-01" autocomplete="bday" />
+          </div>
+          <div>
+            <label for="mistoNarozeni">Místo narození</label>
+            <input type="text" id="mistoNarozeni" name="mistoNarozeni" />
+          </div>
+          <div>
+            <label for="rodneCislo">Rodné číslo</label>
+            <input type="text" id="rodneCislo" name="rodneCislo" inputmode="numeric" placeholder="např. 0703140123" />
+          </div>
+          <div>
+            <label for="statniPrislusnost">Státní občanství</label>
+            <input type="text" id="statniPrislusnost" name="statniPrislusnost" value="ČR" />
+          </div>
+          <div>
+            <label for="dokladCislo">Číslo občanského průkazu / pasu</label>
+            <input type="text" id="dokladCislo" name="dokladCislo" />
+          </div>
+          <div>
+            <label for="telefon">Telefon</label>
+            <input type="tel" id="telefon" name="telefon" autocomplete="tel" />
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Adresa bydliště</legend>
+        <div class="mrizka">
+          <div class="siroke">
+            <label for="ulice">Ulice a číslo popisné</label>
+            <input type="text" id="ulice" name="ulice" autocomplete="street-address" />
+          </div>
+          <div>
+            <label for="mesto">Obec</label>
+            <input type="text" id="mesto" name="mesto" autocomplete="address-level2" />
+          </div>
+          <div>
+            <label for="psc">PSČ</label>
+            <input type="text" id="psc" name="psc" inputmode="numeric" autocomplete="postal-code" />
+          </div>
+          <div class="siroke">
+            <label for="orpBydliste">Obecní úřad obce s rozšířenou působností podle bydliště</label>
+            <input type="text" id="orpBydliste" name="orpBydliste" placeholder="např. Jablonec nad Nisou" />
+            <p class="napoveda">Obvykle větší město ve vašem okolí, kde vyřizujete řidičák nebo občanku.</p>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="poznamka">
+        <strong>Vaše údaje nikam neodcházejí.</strong> PDF se vyrobí přímo ve vašem prohlížeči,
+        na server autoškoly se nic neposílá ani neukládá.
+        Místo, datum a podpisy doplníte rukou na vytištěnou žádost.
+      </div>
+
+      <div class="tlacitka">
+        <button type="submit" id="tlacitko">Vytvořit žádost (PDF)</button>
+        <span id="stav" role="status" aria-live="polite"></span>
+      </div>
+    </form>
+  </div>
+</main>
+
+<script src="vendor/pdf-lib.min.js"></script>
+<script src="vendor/fontkit.umd.min.js"></script>
+<script type="module">
+  import { vyplnZadost, MAX_DELKA } from "./js/zadost-pdf.js";
+
+  const formular = document.getElementById("formular");
+  const tlacitko = document.getElementById("tlacitko");
+  const stav = document.getElementById("stav");
+
+  // Limity délky na jednom místě (zadost-pdf.js); modul je hlídá znovu.
+  for (const [klic, delka] of Object.entries(MAX_DELKA)) {
+    const pole = formular.elements.namedItem(klic);
+    if (pole instanceof HTMLInputElement && pole.type !== "checkbox") pole.maxLength = delka;
+  }
+  formular.elements.datumNarozeni.max = new Date().toISOString().slice(0, 10);
+
+  // Šablona a písmo se stáhnou jen jednou, i když člověk žádost vyrábí opakovaně.
+  let zdroje = null;
+  async function nactiZdroje() {
+    zdroje ??= Promise.all(
+      ["tiskopisy/zadost-2013.pdf", "tiskopisy/LiberationSans-Regular.ttf"].map(async (url) => {
+        const odpoved = await fetch(url);
+        if (!odpoved.ok) throw new Error(`${url}: ${odpoved.status}`);
+        return odpoved.arrayBuffer();
+      }),
+    ).catch((chyba) => { zdroje = null; throw chyba; });
+    return zdroje;
+  }
+
+  /** Bez diakritiky a mezer — ať se soubor jmenuje stejně na všech počítačích. */
+  function bezpecnyNazev(text) {
+    return text
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")
+      .toLowerCase();
+  }
+
+  function zkontroluj() {
+    const e = formular.elements;
+    if (!formular.querySelector("input[name=skupina]:checked")) return "Vyberte aspoň jednu skupinu.";
+    if (!e.jmeno.value.trim()) return "Vyplňte jméno.";
+    if (!e.prijmeni.value.trim()) return "Vyplňte příjmení.";
+    if (!e.datumNarozeni.value || !e.datumNarozeni.checkValidity()) return "Vyplňte platné datum narození.";
+    const rc = e.rodneCislo.value.trim();
+    if (rc && !/^\d{6}\/?\d{3,4}$/.test(rc)) return "Rodné číslo zadejte jako 6 číslic, lomítko a 3–4 číslice.";
+    return null;
+  }
+
+  let posledniUrl = null;
+
+  formular.addEventListener("submit", async (udalost) => {
+    udalost.preventDefault();
+    stav.className = "";
+
+    const chyba = zkontroluj();
+    if (chyba) { stav.className = "chyba"; stav.textContent = chyba; return; }
+
+    const data = new FormData(formular);
+    const udaje = Object.fromEntries(
+      Object.keys(MAX_DELKA).map((klic) => [klic, klic === "skupina" ? data.getAll("skupina").join(", ") : data.get(klic)]),
+    );
+
+    // Okno otevřít hned při kliknutí, jinak ho prohlížeč po čekání zablokuje.
+    const okno = window.open("", "_blank");
+    okno?.document.write("<p style='font-family:sans-serif'>Připravuji žádost…</p>");
+
+    tlacitko.disabled = true;
+    stav.textContent = "Připravuji žádost…";
+    try {
+      const [sablona, pismo] = await nactiZdroje();
+      const pdf = await vyplnZadost(udaje, { sablona, pismo, PDFLib: window.PDFLib, fontkit: window.fontkit });
+
+      if (posledniUrl) URL.revokeObjectURL(posledniUrl);
+      posledniUrl = URL.createObjectURL(new Blob([pdf], { type: "application/pdf" }));
+      const nazev = `zadost-${bezpecnyNazev(udaje.prijmeni) || "autoskola"}.pdf`;
+
+      if (okno) okno.location.href = posledniUrl;
+      stav.innerHTML = "";
+      const odkaz = document.createElement("a");
+      odkaz.href = posledniUrl;
+      odkaz.download = nazev;
+      odkaz.textContent = `Stáhnout ${nazev}`;
+      stav.append(okno ? "Žádost se otevřela v nové záložce. " : "Hotovo. ", odkaz);
+    } catch (e) {
+      okno?.close();
+      console.error(e);
+      stav.className = "chyba";
+      stav.textContent = "Žádost se nepodařilo vytvořit. Zkuste to prosím znovu, případně nám zavolejte.";
+    } finally {
+      tlacitko.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
