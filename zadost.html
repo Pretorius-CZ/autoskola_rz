@@ -173,11 +173,16 @@
           </div>
           <div>
             <label for="dokladCislo">Číslo občanského průkazu / pasu</label>
-            <input type="text" id="dokladCislo" name="dokladCislo" />
+            <input type="text" id="dokladCislo" name="dokladCislo" required />
           </div>
           <div>
-            <label for="telefon">Telefon</label>
-            <input type="tel" id="telefon" name="telefon" autocomplete="tel" />
+            <label for="telefon">Telefon <span class="nepovinne">(nepovinné)</span></label>
+            <input type="tel" id="telefon" name="telefon" autocomplete="tel" placeholder="např. 777 123 456" />
+          </div>
+          <div>
+            <label for="email">E-mail <span class="nepovinne">(nepovinné)</span></label>
+            <input type="email" id="email" name="email" maxlength="100" autocomplete="email" />
+            <p class="napoveda">Do žádosti se nepíše, jen do zprávy při odeslání přes „Poslat / sdílet“.</p>
           </div>
         </div>
       </fieldset>
@@ -223,7 +228,7 @@
 <script src="vendor/pdf-lib.min.js"></script>
 <script src="vendor/fontkit.umd.min.js"></script>
 <script type="module">
-  import { vyplnZadost, MAX_DELKA } from "./js/zadost-pdf.js";
+  import { vyplnZadost, cisliceTelefonu, MAX_DELKA } from "./js/zadost-pdf.js";
 
   const formular = document.getElementById("formular");
   const tlacitko = document.getElementById("tlacitko");
@@ -267,12 +272,17 @@
     if (!e.datumNarozeni.value || !e.datumNarozeni.checkValidity()) return "Vyplňte platné datum narození.";
     const rc = e.rodneCislo.value.trim();
     if (rc && !/^\d{6}\/?\d{3,4}$/.test(rc)) return "Rodné číslo zadejte jako 6 číslic, lomítko a 3–4 číslice.";
+    if (!e.dokladCislo.value.trim()) return "Vyplňte číslo občanského průkazu nebo pasu.";
+    const tel = e.telefon.value.trim();
+    if (tel && !/^\d{9}$/.test(cisliceTelefonu(tel))) return "Telefon musí mít 9 číslic (předvolbu +420 psát nemusíte).";
+    if (e.email.value.trim() && !e.email.checkValidity()) return "Zkontrolujte e-mailovou adresu.";
     return null;
   }
 
   const sdilet = document.getElementById("sdilet");
   let posledniUrl = null;
   let posledniSoubor = null;
+  let posledniText = "";
   const umiSdilet = !!navigator.canShare?.({ files: [new File([""], "zkouska.pdf", { type: "application/pdf" })] });
 
   // Sdílení otevře nabídku telefonu (e-mail, WhatsApp…) s přiloženým PDF.
@@ -283,7 +293,7 @@
       await navigator.share({
         files: [posledniSoubor],
         title: "Žádost o přijetí k výuce a výcviku",
-        text: "Žádost o přijetí k výuce a výcviku — Autoškola Roman Zelníček",
+        text: posledniText,
       });
     } catch (e) {
       // Zavření nabídky bez odeslání není chyba.
@@ -324,6 +334,11 @@
       posledniUrl = URL.createObjectURL(new Blob([pdf], { type: "application/pdf" }));
       const nazev = `zadost-${bezpecnyNazev(udaje.prijmeni) || "autoskola"}.pdf`;
       posledniSoubor = new File([pdf], nazev, { type: "application/pdf" });
+      const email = String(data.get("email") ?? "").trim().slice(0, 100);
+      posledniText = [
+        `Žádost o přijetí k výuce a výcviku — ${udaje.jmeno.trim()} ${udaje.prijmeni.trim()}`,
+        email && `Kontaktní e-mail: ${email}`,
+      ].filter(Boolean).join("\n");
       sdilet.hidden = !navigator.canShare?.({ files: [posledniSoubor] });
 
       if (okno) okno.location.href = posledniUrl;

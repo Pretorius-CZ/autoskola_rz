@@ -109,6 +109,24 @@ function formatRodneCislo(text) {
     : text;
 }
 
+/**
+ * Jen číslice telefonu, bez mezer a předvolby (+420, 00420, 420).
+ * Mezery se mažou dřív než předvolba, jinak by "+420 777…" předvolbu
+ * neschovalo. Platné číslo má po úpravě 9 číslic.
+ */
+export function cisliceTelefonu(text) {
+  return String(text ?? "")
+    .replace(/[\s\-–().\/]/g, "")
+    .replace(/^(\+|00)?420(?=\d{9}$)/, "");
+}
+
+/** "+420777123456" → "777 123 456"; co nemá 9 číslic, zůstane, jak je. */
+function formatTelefon(text) {
+  if (!text) return text;
+  const c = cisliceTelefonu(text);
+  return /^\d{9}$/.test(c) ? `${c.slice(0, 3)} ${c.slice(3, 6)} ${c.slice(6)}` : text;
+}
+
 function slozAdresu(ulice, mesto) {
   const casti = [ulice, mesto].filter(Boolean);
   return casti.length ? casti.join(", ") : null;
@@ -176,7 +194,7 @@ export async function vyplnZadost(vstup, { sablona, pismo, PDFLib, fontkit }) {
   napis("rodneCislo", formatRodneCislo(u.rodneCislo));
   napis("obcanstvi", u.statniPrislusnost);
   napis("dokladCislo", u.dokladCislo);
-  napis("telefon", u.telefon);
+  napis("telefon", formatTelefon(u.telefon));
   napis("adresa", slozAdresu(u.ulice, u.mesto));
   napis("psc", u.psc);
   napis("orpBydliste", u.orpBydliste);
