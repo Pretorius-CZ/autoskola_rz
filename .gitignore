@@ -1,3 +1,7 @@
 node_modules/
 # zdroj posudku z ministerstva (DOC); na webu je převedené PDF
 tiskopisy/*.doc
+
+# místní vývoj (nastavení Claude Code, screenshoty chyb)
+.claude/
+chyby/
