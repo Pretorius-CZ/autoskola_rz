@@ -85,11 +85,6 @@
       border: 1px solid var(--gray-200); border-radius: 9px; background: var(--white);
     }
     input:focus { outline: 2px solid var(--blue); outline-offset: 1px; border-color: transparent; }
-    .skupiny { display: flex; flex-wrap: wrap; gap: 10px; }
-    .skupiny label {
-      display: inline-flex; align-items: center; gap: 8px; margin: 0;
-      border: 1px solid var(--gray-200); border-radius: 9px; padding: 8px 14px; cursor: pointer;
-    }
     .napoveda { font-size: .8rem; color: var(--gray-600); margin-top: 6px; }
 
     .poznamka {
@@ -135,19 +130,12 @@
 
     <form id="formular" novalidate>
       <fieldset>
-        <legend>Skupina řidičského oprávnění</legend>
-        <label>Žádám o výcvik pro skupinu</label>
-        <div class="skupiny">
-          <label><input type="checkbox" name="skupina" value="B" /> B</label>
-          <label><input type="checkbox" name="skupina" value="AM" /> AM</label>
-          <label><input type="checkbox" name="skupina" value="A1" /> A1</label>
-          <label><input type="checkbox" name="skupina" value="A2" /> A2</label>
-          <label><input type="checkbox" name="skupina" value="A" /> A</label>
-        </div>
-        <div class="mrizka" style="margin-top: 16px;">
+        <legend>Řidičské oprávnění</legend>
+        <p class="napoveda" style="margin: 0 0 14px;">Žádost je na výcvik pro skupinu <strong>B</strong> (osobní automobil).</p>
+        <div class="mrizka">
           <div>
             <label for="drzitelSkupin">Už mám řidičák pro skupiny <span class="nepovinne">(nepovinné)</span></label>
-            <input type="text" id="drzitelSkupin" name="drzitelSkupin" placeholder="např. AM, B" />
+            <input type="text" id="drzitelSkupin" name="drzitelSkupin" placeholder="např. AM" />
           </div>
           <div>
             <label for="cisloRidicskeho">Číslo řidičského průkazu <span class="nepovinne">(nepovinné)</span></label>
@@ -288,7 +276,6 @@
 
   function zkontroluj() {
     const e = formular.elements;
-    if (!formular.querySelector("input[name=skupina]:checked")) return "Vyberte aspoň jednu skupinu.";
     if (!e.jmeno.value.trim()) return "Vyplňte jméno.";
     if (!e.prijmeni.value.trim()) return "Vyplňte příjmení.";
     if (!e.datumNarozeni.value || !e.datumNarozeni.checkValidity()) return "Vyplňte platné datum narození.";
@@ -339,8 +326,9 @@
     if (chyba) { stav.className = "chyba"; stav.textContent = chyba; return; }
 
     const data = new FormData(formular);
+    // Autoškola učí jen skupinu B, ve formuláři se proto nevybírá.
     const udaje = Object.fromEntries(
-      Object.keys(MAX_DELKA).map((klic) => [klic, klic === "skupina" ? data.getAll("skupina").join(", ") : data.get(klic)]),
+      Object.keys(MAX_DELKA).map((klic) => [klic, klic === "skupina" ? "B" : data.get(klic)]),
     );
 
     // Okno otevřít hned při kliknutí, jinak ho prohlížeč po čekání zablokuje.
