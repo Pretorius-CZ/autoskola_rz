@@ -66,7 +66,7 @@
     .siroke { grid-column: 1 / -1; }
     label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: 6px; }
     label .nepovinne { font-weight: 400; color: var(--gray-400); }
-    input[type=text], input[type=tel], input[type=date] {
+    input[type=text], input[type=tel], input[type=email], input[type=date] {
       width: 100%; font: inherit; font-size: .95rem; padding: 10px 12px;
       border: 1px solid var(--gray-200); border-radius: 9px; background: var(--white);
     }
@@ -95,6 +95,8 @@
     #stav { font-size: .9rem; color: var(--gray-600); }
     #stav a { color: var(--blue); font-weight: 700; }
     #stav.chyba { color: #b91c1c; }
+    #whatsapp { margin-top: 16px; font-size: .9rem; color: var(--gray-600); }
+    #whatsapp a { color: #128c4b; font-weight: 700; white-space: nowrap; }
 
     @media(max-width: 520px) { form { padding: 22px; } }
   </style>
@@ -221,6 +223,12 @@
         <button type="button" id="sdilet" hidden>Poslat / sdílet</button>
         <span id="stav" role="status" aria-live="polite"></span>
       </div>
+      <p id="whatsapp" hidden>
+        Žádost pošlete na WhatsApp autoškoly:
+        <a href="https://wa.me/420777946063?text=Dobr%C3%BD%20den%2C%20pos%C3%ADl%C3%A1m%20%C5%BE%C3%A1dost%20o%20p%C5%99ijet%C3%AD%20k%20v%C3%BDuce%20a%20v%C3%BDcviku."
+           target="_blank" rel="noopener">+420 777 946 063</a>
+        <span id="whatsapp-postup"></span>
+      </p>
     </form>
   </div>
 </main>
@@ -280,6 +288,8 @@
   }
 
   const sdilet = document.getElementById("sdilet");
+  const whatsapp = document.getElementById("whatsapp");
+  const whatsappPostup = document.getElementById("whatsapp-postup");
   let posledniUrl = null;
   let posledniSoubor = null;
   let posledniText = "";
@@ -309,6 +319,7 @@
     udalost.preventDefault();
     stav.className = "";
     sdilet.hidden = true;
+    whatsapp.hidden = true;
 
     const chyba = zkontroluj();
     if (chyba) { stav.className = "chyba"; stav.textContent = chyba; return; }
@@ -340,6 +351,12 @@
         email && `Kontaktní e-mail: ${email}`,
       ].filter(Boolean).join("\n");
       sdilet.hidden = !navigator.canShare?.({ files: [posledniSoubor] });
+      // Odkaz otevře chat s autoškolou, PDF ale WhatsApp přes odkaz přiložit
+      // nedovolí — to se dělá přes "Poslat / sdílet", nebo ručně ze stažených souborů.
+      whatsappPostup.textContent = sdilet.hidden
+        ? "— žádost si nejdřív stáhněte a v chatu ji přiložte jako dokument."
+        : "— klepněte na číslo a pošlete pozdrav, pak přes „Poslat / sdílet“ vyberte WhatsApp a chat s autoškolou.";
+      whatsapp.hidden = false;
 
       if (okno) okno.location.href = posledniUrl;
       stav.innerHTML = "";
